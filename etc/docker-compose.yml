@@ -1,0 +1,27 @@
+version: "3.1"
+services:
+  postgres:
+    image: postgres:11-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: actix
+      POSTGRES_USER: actix
+      POSTGRES_DB: test
+    ports:
+      - 5432:5432
+
+  hello-actix:
+    build: .
+    links:
+      - postgres
+    environment:
+      SERVER.HOST: 0.0.0.0
+      SERVER.PORT: 12345
+      DB.DBNAME: test
+      DB.USER: actix
+      DB.PASSWORD: actix
+      DB.HOST: postgres
+      DB.PORT: 5432
+      DB.POOL.MAX_SIZE: 32
+    ports:
+    - 12345:12345
